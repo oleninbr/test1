@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import useForm from '../hooks/useForm';
 
 const AddressForm = ({ onAdd, onUpdate, editId, contacts, setEditId }) => {
-  const initialForm = editId
-    ? contacts.find((c) => c.id === editId) || { firstName: '', lastName: '', phone: '' }
-    : { firstName: '', lastName: '', phone: '' };
+  const initialForm = useMemo(() => {
+    return editId
+      ? contacts.find((c) => c.id === editId) || { firstName: '', lastName: '', phone: '' }
+      : { firstName: '', lastName: '', phone: '' };
+  }, [editId, contacts]);
 
   const { values, errors, handleChange, handleSubmit, resetForm } = useForm(initialForm);
 
@@ -37,9 +39,7 @@ const AddressForm = ({ onAdd, onUpdate, editId, contacts, setEditId }) => {
               style={{ marginLeft: '10px', borderColor: errors[field] ? 'red' : undefined }}
             />
           </label>
-          {errors[field] && (
-            <div style={{ color: 'red', fontSize: '0.8em' }}>{errors[field]}</div>
-          )}
+          {errors[field] && <div style={{ color: 'red', fontSize: '0.8em' }}>{errors[field]}</div>}
         </div>
       ))}
       <button type="submit" style={{ marginRight: '10px' }}>
